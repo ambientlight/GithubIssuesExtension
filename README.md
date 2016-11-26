@@ -2,14 +2,14 @@
 
 ##Github Issues Xcode Extension##
 
-Have you even been creating github isses while coding and adding them as `//TODO:` into your source files? Now you won't need to leave xcode while doing that!
+Have you even been creating github issues while coding and adding them as `//TODO:` into your source files? Now you won't need to leave xcode while doing that!
 
 This extension adds github issues support to xcode editor.  
 Capabilities: 
 
 * Create new github issue
 * Modify existing github issue
-* Remove all `TODO:` blocks that are linked to github issues if the issues are closed
+* Remove all `TODO:` blocks that are linked to github issues if issues are already closed
 
 Commands:
 
