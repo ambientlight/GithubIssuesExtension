@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Github Issues </string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Github Issues</string>
+	<key>CFBundlePackageType</key>
+	<string>XPC!</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>XCSourceEditorCommandDefinitions</key>
+			<array>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).NewIssueCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>NewIssue</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Add New Issue Template</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).EditIssueCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>EditIssue</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Add Edit Issue Template</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SubmitIssuesCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>SubmitNewIssues</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Synchronize Issues</string>
+				</dict>
+				<dict>
+					<key>XCSourceEditorCommandClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).RemoveClosedIssuesCommand</string>
+					<key>XCSourceEditorCommandIdentifier</key>
+					<string>RemoveClosedIssues</string>
+					<key>XCSourceEditorCommandName</key>
+					<string>Remove Closed Issues</string>
+				</dict>
+			</array>
+			<key>XCSourceEditorExtensionPrincipalClass</key>
+			<string>$(PRODUCT_MODULE_NAME).GithubIssuesExtension</string>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.dt.Xcode.extension.source-editor</string>
+	</dict>
+	<key>NSHumanReadableCopyright</key>
+	<string>Copyright © 2016 Ambientlight. All rights reserved.</string>
+</dict>
+</plist>

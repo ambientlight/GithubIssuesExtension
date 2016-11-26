@@ -1,0 +1,10 @@
+framework module RequestKit {
+  umbrella header "RequestKit.h"
+
+  export *
+  module * { export * }
+}
+
+module RequestKit.Swift {
+    header "RequestKit-Swift.h"
+}

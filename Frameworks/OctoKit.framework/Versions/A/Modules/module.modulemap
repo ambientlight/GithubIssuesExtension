@@ -1,0 +1,10 @@
+framework module OctoKit {
+  umbrella header "OctoKit.h"
+
+  export *
+  module * { export * }
+}
+
+module OctoKit.Swift {
+    header "OctoKit-Swift.h"
+}
