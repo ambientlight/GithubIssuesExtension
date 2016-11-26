@@ -34,6 +34,10 @@ If shouldOverrideDescription is not specified, the new description will be appen
 
 ``title``, `assignee`, `status`, `shouldOverrideDescription` are optional.
 
+## App Store
+
+Will be available later after we play enough with this initial release
+
 ## Installation
 
 1. Close the repo and open ``GithubIssuesExtension.xcodeproj``
