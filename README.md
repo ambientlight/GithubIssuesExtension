@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/appIcon512.png" alt="Drawing" style="width: 256px;"/>
+
 ##Github Issues Xcode Extension##
 
 Have you even been creating github isses while coding and adding them as `//TODO:` into your source files? Now you won't need to leave xcode while doing that!
@@ -15,6 +17,22 @@ Commands:
 * Create modify issue template
 * Synchronize Issues (commits issue template to github)
 * Remove closed issues
+
+## Create New Github Issue
+
+![image](https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/newIssue.gif)
+
+Owner and repository name are automatically inferred from the source file header. Project name is treated as a repository, while the name of the the copyright holder is treated as repository owner.
+
+``assignee`` parameter is optional
+
+## Modify Existing Github Issue
+
+![image](https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/modifyIssue.gif)
+
+If shouldOverrideDescription is not specified, the new description will be appended to existing one. 
+
+``title``, `assignee`, `status`, `shouldOverrideDescription` are optional.
 
 ## Installation
 
