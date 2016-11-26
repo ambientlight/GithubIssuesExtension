@@ -40,7 +40,7 @@ Will be available later after we play enough with this initial release
 
 ## Installation
 
-1. Close the repo and open ``GithubIssuesExtension.xcodeproj``
+1. Clone the repo and open ``GithubIssuesExtension.xcodeproj``
 2. Enable signing for both the Application and the Xcode Editor Extension
 3. Run Product -> Archive
 4. Open Window -> Organizer -> Right click on generated archive -> Show in Finder
