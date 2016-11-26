@@ -46,7 +46,7 @@ class EditIssueCommand: NSObject, XCSourceEditorCommand {
             "// <#Description#>"
         ]
         
-        let targetError: NSError? = (!sourceEditSession.insert(strings: newIssueBody, withPreservedIndentationAfter: selection.end.line - 1)) ? NSError(domain: GithubIssuesExtension.Literal.errorDomainIdentifier, code: GithubIssuesExtension.ErrorCode.insertionFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "Couldn't insert. Please submit an issues on https://github.com/ambientlight/GithubIssuesEditorExtension/issues if it is not there already"]) : nil
+        let targetError: NSError? = (!sourceEditSession.insert(strings: newIssueBody, withPreservedIndentationAfter: selection.end.line - 1)) ? NSError(domain: GithubIssuesExtension.Literal.errorDomainIdentifier, code: GithubIssuesExtension.ErrorCode.insertionFailed.rawValue, userInfo: [NSLocalizedDescriptionKey: "Couldn't insert. Please submit an issues on https://github.com/ambientlight/GithubIssuesExtension/issues if it is not there already"]) : nil
         completionHandler(targetError)
     }
     
