@@ -24,6 +24,10 @@
 		1A1D1D8D1DEA0234003FD3FE /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1D1D8B1DEA0234003FD3FE /* RequestKit.framework */; };
 		1A1D1D911DEA0268003FD3FE /* extension_CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1D1D8F1DEA0268003FD3FE /* extension_CharacterSet.swift */; };
 		1A1D1D921DEA0268003FD3FE /* extension_String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1D1D901DEA0268003FD3FE /* extension_String.swift */; };
+		1A4374541DEA366B00BB074F /* OctoKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1D1D8A1DEA0234003FD3FE /* OctoKit.framework */; };
+		1A4374551DEA366B00BB074F /* OctoKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1D1D8A1DEA0234003FD3FE /* OctoKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1A4374561DEA366B00BB074F /* RequestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1D1D8B1DEA0234003FD3FE /* RequestKit.framework */; };
+		1A4374571DEA366B00BB074F /* RequestKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1A1D1D8B1DEA0234003FD3FE /* RequestKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +50,18 @@
 				1A1D1D771DEA0157003FD3FE /* GithubIssueEditorExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A4374581DEA366B00BB074F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1A4374551DEA366B00BB074F /* OctoKit.framework in Embed Frameworks */,
+				1A4374571DEA366B00BB074F /* RequestKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -80,6 +96,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A4374541DEA366B00BB074F /* OctoKit.framework in Frameworks */,
+				1A4374561DEA366B00BB074F /* RequestKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +201,7 @@
 				1A1D1D501DE9E7AC003FD3FE /* Frameworks */,
 				1A1D1D511DE9E7AC003FD3FE /* Resources */,
 				1A1D1D7B1DEA0157003FD3FE /* Embed App Extensions */,
+				1A4374581DEA366B00BB074F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -432,6 +451,10 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 5YCYZ6QN9Q;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = GithubIssuesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -450,6 +473,10 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 5YCYZ6QN9Q;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = GithubIssuesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
