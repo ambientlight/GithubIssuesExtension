@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/appIcon512.png" alt="Drawing" style="width: 256px;"/>
+![image](https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/appIcon256.png)
 
 ##Github Issues Xcode Extension##
 
