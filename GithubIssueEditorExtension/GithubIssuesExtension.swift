@@ -192,6 +192,9 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                 continue
             }
             
+            //TODO: Ambientlight/GithubIssuesExtension: Issue #2: Add support for multiline title in new issue template
+            //link: https://github.com/Ambientlight/GithubIssuesExtension/issues/2
+            
             //matches: [//][captures 1+ letters and spaces][: 0 or 1 times][0+ spaces][captures 1+ digits OR 1+ letters and spaces]
             let capturingGroups = "//([\\w\\s]+):?\\s*(\\d+|[\\w\\s]+)".firstMatchCapturingGroups(in: lineNoIndent)
             if let parsedKeyThatCanContrainSpaces = capturingGroups.first,
@@ -299,7 +302,6 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
         return targetIssueEntitiesAndItsLineRange
     }
     
-    
     /// Sanitizes underlying OctoKit error
     ///
     /// - Parameters:
@@ -325,7 +327,7 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
         } else if (error as NSError).domain == "com.nerdishbynature.octokit" && (error as NSError).code == 404 {
             return NSError(domain: GithubIssuesExtension.Literal.errorDomainIdentifier,
                            code: GithubIssuesExtension.ErrorCode.unattributedGithubRequestError.rawValue,
-                           userInfo: [NSLocalizedDescriptionKey: "Github request error: \((error as NSError).code): Likely repository or issue has not been found"])
+                           userInfo: [NSLocalizedDescriptionKey: "Github request error: \((error as NSError).code): Likely repository or issue has not been found. (are you trying to access private repository but you access token doesn't contain a repo scope?)"])
         } else {
             return error as NSError
         }

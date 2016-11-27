@@ -25,7 +25,7 @@ Commands:
 Owner and repository name are automatically inferred from the source file header. Project name is treated as a repository, while the name of the the copyright holder is treated as repository owner.
 
 ``assignee`` parameter is optional.  
-``Desciption`` can be multiline. Empty comment lines ``//`` will be treated as newlines.  
+``Description`` can be multiline. Empty comment lines ``//`` will be treated as newlines.  
 (while issue ``title`` cannot be multiline)
 
 ## Modify Existing Github Issue
@@ -52,7 +52,7 @@ Will be available later after we play enough with this initial release
 8. Navigate to your Github Settings (in browser). 
 9. Go to `Personal access token` (which should be last in the list on the left)
 10. Click on `Generate new token` (if you don't have one already)
-11. (Optionally add repo scope if you intend to use this plugin with private repos.)
+11. __(Optionally add repo scope if you intend to use this plugin with private repos.)__
 12. Generate token and copy it.
 13. Open ``GithubIssuesExtension.app``. Paste the token into `GithubIssueExtension` app and hit return. 
 14. Close the app.
