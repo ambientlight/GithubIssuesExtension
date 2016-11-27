@@ -24,7 +24,9 @@ Commands:
 
 Owner and repository name are automatically inferred from the source file header. Project name is treated as a repository, while the name of the the copyright holder is treated as repository owner.
 
-``assignee`` parameter is optional
+``assignee`` parameter is optional.  
+``Desciption`` can be multiline. Empty comment lines ``//`` will be treated as newlines.  
+(while issue ``title`` cannot be multiline)
 
 ## Modify Existing Github Issue
 
