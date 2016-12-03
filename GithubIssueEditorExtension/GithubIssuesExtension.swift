@@ -153,8 +153,8 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
             //matches: [//TODO:][0+ spaces][captures 1+ letters][0+ spaces][/][0+ spaces][captures 1+ letters][0+ spaces][:][0+ spaces][Issue][0+ spaces][#][captures 1+ digits][0+ spaces][:][0+ spaces][captures anything left]
             let capturingGroups = "//TODO:\\s*([\\w]+)\\s*/\\s*([\\w]+)\\s*:\\s*Issue\\s*#([\\d]+)\\s*:\\s*(.*)".firstMatchCapturingGroups(in: lineNoIndent)
             
-            //matches: [//link:][0+ spaces][captures 1+ letters][anything left]
-            let linkLineCapturingGroups = "//link:\\s*([\\w]+).*".firstMatchCapturingGroups(in: nextLineNoIndent)
+            //matches: [//link:][0+ spaces][captures 1+ anything left]
+            let linkLineCapturingGroups = "//link:\\s*(.+)".firstMatchCapturingGroups(in: nextLineNoIndent)
             if capturingGroups.count == 4 && linkLineCapturingGroups.count == 1 {
                 skipNextLine = true
                 
