@@ -195,8 +195,8 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
             //TODO: Ambientlight/GithubIssuesExtension: Issue #2: Add support for multiline title in new issue template
             //link: https://github.com/Ambientlight/GithubIssuesExtension/issues/2
             
-            //matches: [//][captures 1+ letters and spaces][: 0 or 1 times][0+ spaces][captures 1+ digits OR 1+ letters and spaces]
-            let capturingGroups = "//([\\w\\s]+):?\\s*(\\d+|[\\w\\s]+)".firstMatchCapturingGroups(in: lineNoIndent)
+            //matches: [//][captures 1+ letters and spaces][: 0 or 1 times][0+ spaces][captures 1+ digits OR 1+ of anything]
+            let capturingGroups = "//([\\w\\s]+):?\\s*(\\d+|.+)".firstMatchCapturingGroups(in: lineNoIndent)
             if let parsedKeyThatCanContrainSpaces = capturingGroups.first,
                let issueKey = IssueKey(rawValue: parsedKeyThatCanContrainSpaces.removingCharacters(in: CharacterSet.whitespaces).lowercased()){
                 
