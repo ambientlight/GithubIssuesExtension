@@ -182,6 +182,7 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
         var currentIssueEntity = IssueEntity()
         var isParsingNewIssue = false
         var startedParsingDescription = false
+        var parsingTitle = false
         var latestStartLine = 0
 
         for (index, lineObject) in sourceTextBuffer.lines.enumerated() {
@@ -204,10 +205,12 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                 //finalize current one and move on
                 if isParsingNewIssue {
                     startedParsingDescription = false
+                    parsingTitle = true
                     targetIssueEntitiesAndItsLineRange.append((currentIssueEntity, latestStartLine ..< index))
                     currentIssueEntity = IssueEntity()
                 } else {
                     isParsingNewIssue = true
+                    parsingTitle = true
                 }
                 
                 currentIssueEntity.designatedForEditing = (issueKey == .editGithubIssue)
@@ -228,6 +231,7 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                 if !lineNoIndent.hasPrefix("//"){
                     isParsingNewIssue = false
                     startedParsingDescription = false
+                    parsingTitle = false
                     targetIssueEntitiesAndItsLineRange.append((currentIssueEntity, latestStartLine ..< index))
                     currentIssueEntity = IssueEntity()
                     continue
@@ -238,6 +242,7 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                 defer {
                     if (index == sourceTextBuffer.lines.count - 1){
                         isParsingNewIssue = false
+                        parsingTitle = false
                         startedParsingDescription = false
                         targetIssueEntitiesAndItsLineRange.append((currentIssueEntity, latestStartLine ..< index + 1))
                     }
@@ -246,13 +251,21 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                 //matches: [//][0+ spaces][-][0+ spaces][captures 1+ letters][0+ spaces][:][0+ spaces][captures 1+ any characters]
                 let capturedParameters = "//\\s*-\\s*(\\w+)\\s*:\\s*(.+)".firstMatchCapturingGroups(in: lineNoIndent)
                 if capturedParameters.isEmpty {
-                    //found not a parameter pattern, treated as description
+                    //found not a parameter pattern, treated as description if we are not parsing title anymore
                     
                     let lineWithoutCommentsPrefixCleaned = lineNoIndent.substring(from: lineNoIndent.index(lineNoIndent.startIndex, offsetBy: 2)).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
                     
+                    //we are parsing title until we either reach a parameter line or //[empty]
+                    if parsingTitle {
+                        if lineWithoutCommentsPrefixCleaned.isEmpty {
+                            parsingTitle = false
+                        } else if let title = currentIssueEntity.foundTitleº {
+                            currentIssueEntity.foundTitleº = title + " " + lineWithoutCommentsPrefixCleaned
+                        }
+                    
                     //if we already started parsing description, treat //[empty] as newline, ignore //[empty] otherwise
                     //startedParsingDescription is set once we encounter any first //[random text] which is not a parameter pattern after [keyline]
-                    if startedParsingDescription {
+                    } else if startedParsingDescription {
                         currentIssueEntity.foundDescription += (lineWithoutCommentsPrefixCleaned.isEmpty) ? "\n" : lineWithoutCommentsPrefixCleaned
                     } else if !lineWithoutCommentsPrefixCleaned.isEmpty {
                         currentIssueEntity.foundDescription += lineWithoutCommentsPrefixCleaned
@@ -260,6 +273,10 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                     }
                     
                 } else if capturedParameters.count == 2 {
+                    
+                    //we are parsing title until we either reach a parameter line or //[empty]
+                    parsingTitle = false
+                    
                     let parameterString = capturedParameters[0]
                     let parameterValue = capturedParameters[1]
                     guard let parameter = Parameter(rawValue: parameterString) else {
