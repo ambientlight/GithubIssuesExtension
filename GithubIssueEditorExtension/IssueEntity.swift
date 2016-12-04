@@ -38,6 +38,9 @@ struct IssueEntity {
     
     /// indicates whether this issue entity is designated for issue editing (new issue otherwise)
     var designatedForEditing: Bool = false
+    
+    /// the ranges of code blocks within the issues description
+    var codeRanges = [Range<Int>]()
 }
 
 

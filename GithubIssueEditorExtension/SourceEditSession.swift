@@ -53,22 +53,7 @@ class SourceEditSession {
             return false
         }
         
-        let nonSpaceCharacters = CharacterSet.whitespacesAndNewlines.inverted
-        
-        let indentationEndIndex: String.Index
-        let targetLine = (self.buffer.lines[offsetedIndex] as! String)
-        
-        // retriving the possion of next character after indentation
-        if let range = targetLine.rangeOfCharacter(from: nonSpaceCharacters){
-            indentationEndIndex = range.lowerBound
-        } else {
-            // if line contains only whitespaces and newlines, set the indendationEndIndex 
-            // to the position before the last (carrier return) character
-            indentationEndIndex = (targetLine.isEmpty) ? targetLine.endIndex : targetLine.index(before: targetLine.endIndex)
-        }
-        
-        // construct the indendentation string that will be prefixed in each string we will insert
-        let currentIndentation = targetLine.substring(to: indentationEndIndex).trimmingCharacters(in: CharacterSet.newlines)
+        let currentIndentation = (self.buffer.lines[offsetedIndex] as! String).extractingIndentation()
         let newStringsToInsert = strings.map { ($0.hasSuffix("\n") ? currentIndentation + $0 : currentIndentation + $0 + "\n") }
         
         let range: Range<Int> = offsetedIndex + 1 ..< offsetedIndex + 1 + strings.count
@@ -85,7 +70,7 @@ class SourceEditSession {
     /// - Returns: true if insertion succeeds
     public func remove(linesAt indexRange: Range<Int>) -> Bool {
         
-        guard indexRange.lowerBound >= 0 && indexRange.upperBound <= self.buffer.lines.count else {
+        guard indexRange.lowerBound >= 0 && indexRange.upperBound + self.editOffset <= self.buffer.lines.count else {
             //print("\(#function):\(#line): Remove silenty failed: Range is outside the bounds of buffer lines(\(self.buffer.lines.count))")
             return false
         }

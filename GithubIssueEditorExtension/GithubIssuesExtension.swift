@@ -80,6 +80,45 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
         }
     }
     
+    /// Derives the language of the source based on the file extension
+    /// present in xcode-generated header
+    ///
+    /// - Parameter sourceTextBuffer: invocation's sourceTextBuffer
+    /// - Returns: language name or file extension, nil if source filename is not present 
+    /// as first non-empty line in xcode-generated header
+    static func deriveSourceFileLanguage(fromHeaderIn sourceTextBuffer: XCSourceTextBuffer) -> String? {
+        
+        var nonEmptyHeaderLines = [String]()
+        
+        // extracts header lines while ignores empty ones
+        for lineObject in sourceTextBuffer.lines {
+            let lineNoIndent = (lineObject as! String).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            if !lineNoIndent.hasPrefix("//"){
+                break
+            }
+            
+            if lineNoIndent != "//" {
+                nonEmptyHeaderLines.append(lineNoIndent)
+            }
+        }
+
+        guard nonEmptyHeaderLines.count >= 1 else {
+            return nil
+        }
+        
+        let extensionLanguageMap =
+            ["m": "objective-c",
+             "h": "objective-c"]
+        
+        //matches: [//][0+ spaces][anything that starts with letter][.][captures 1+ of anything]
+        let sourceFileExtensionCapturingGroups = "//\\s*\\w.*\\.(.+)".firstMatchCapturingGroups(in: nonEmptyHeaderLines[0])
+        if let parsedExtension = sourceFileExtensionCapturingGroups.first {
+            return extensionLanguageMap[parsedExtension] ?? parsedExtension
+        } else {
+            return nil
+        }
+    }
+    
     /// Derives the owner and repository name from xcode-generated
     /// source file header. 
     /// Project name is treated as a repository, 
@@ -184,17 +223,38 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
         var startedParsingDescription = false
         var parsingTitle = false
         var latestStartLine = 0
-
+        
+        var isParsingCodeBlock = false
+        var codeBlockRootIndentationº: String?
+        var currentCodeBlockLowerBoundº: Int?
+        
         for (index, lineObject) in sourceTextBuffer.lines.enumerated() {
             let lineNoIndent = (lineObject as! String).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            
+            if isParsingCodeBlock && !lineNoIndent.hasPrefix("//") {
+                var line = (lineObject as! String)
+                
+                var codeBlockRootIndenation: String
+                if let indentation = codeBlockRootIndentationº {
+                    codeBlockRootIndenation = indentation
+                } else {
+                    codeBlockRootIndenation = line.extractingIndentation()
+                    codeBlockRootIndentationº = codeBlockRootIndenation
+                }
+                
+                //remove the root indentation from code line
+                if let indentationRange = line.range(of: codeBlockRootIndenation){
+                    line = line.substring(from: indentationRange.upperBound)
+                }
+                
+                currentIssueEntity.foundDescription += line
+                continue
+            }
             
             //avoid matching when non-needed
             if !isParsingNewIssue, !lineNoIndent.hasPrefix("//"){
                 continue
             }
-            
-            //TODO: Ambientlight/GithubIssuesExtension: Issue #2: Add support for multiline title in new issue template
-            //link: https://github.com/Ambientlight/GithubIssuesExtension/issues/2
             
             //matches: [//][captures 1+ letters and spaces][: 0 or 1 times][0+ spaces][captures 1+ digits OR 1+ of anything]
             let capturingGroups = "//([\\w\\s]+):?\\s*(\\d+|.+)".firstMatchCapturingGroups(in: lineNoIndent)
@@ -228,7 +288,7 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
             if isParsingNewIssue {
                 
                 //finalize current issue
-                if !lineNoIndent.hasPrefix("//"){
+                if !lineNoIndent.hasPrefix("//") && !isParsingCodeBlock {
                     isParsingNewIssue = false
                     startedParsingDescription = false
                     parsingTitle = false
@@ -266,7 +326,23 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                     //if we already started parsing description, treat //[empty] as newline, ignore //[empty] otherwise
                     //startedParsingDescription is set once we encounter any first //[random text] which is not a parameter pattern after [keyline]
                     } else if startedParsingDescription {
-                        currentIssueEntity.foundDescription += (lineWithoutCommentsPrefixCleaned.isEmpty) ? "\n" : lineWithoutCommentsPrefixCleaned
+                        //start parsing code block
+                        if lineWithoutCommentsPrefixCleaned.hasPrefix("<code>") && !isParsingCodeBlock {
+                            isParsingCodeBlock = true
+                            currentIssueEntity.foundDescription += "\n" + "```" + (self.deriveSourceFileLanguage(fromHeaderIn: sourceTextBuffer) ?? String()) + "\n"
+                            currentCodeBlockLowerBoundº = index + 1
+                        } else if lineWithoutCommentsPrefixCleaned.hasPrefix("</code>") && isParsingCodeBlock {
+                            currentIssueEntity.foundDescription += "\n" + "```" + "\n"
+                            isParsingCodeBlock = false
+                            
+                            if let currentCodeBlockLowerBound = currentCodeBlockLowerBoundº {
+                                currentIssueEntity.codeRanges.append(currentCodeBlockLowerBound ..< index)
+                            }
+                            currentCodeBlockLowerBoundº = nil
+                            
+                        } else {
+                            currentIssueEntity.foundDescription += (lineWithoutCommentsPrefixCleaned.isEmpty) ? "\n" : lineWithoutCommentsPrefixCleaned
+                        }
                     } else if !lineWithoutCommentsPrefixCleaned.isEmpty {
                         currentIssueEntity.foundDescription += lineWithoutCommentsPrefixCleaned
                         startedParsingDescription = true

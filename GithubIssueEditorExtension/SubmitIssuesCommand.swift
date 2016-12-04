@@ -63,14 +63,25 @@ class SubmitIssuesCommand: NSObject, XCSourceEditorCommand {
                 let targetAssigneeº = ((issueEntity.foundAssigneeº ?? "").isPlaceholder) ? nil : issueEntity.foundAssigneeº
                 
                 /// target closure that replaces the issues template with github issue associated TODO
-                let replaceIssueTemplateWithTargetIssueContent = { (issue: Issue!) in
+                let replaceIssueTemplateWithTargetIssueContent = { (issueº: Issue?) in
                     
-                    let resultingIssueTitle = issue.title ?? String()
-                    let resultingIssueNumber = issue.number ?? -1
+                    let resultingIssueTitle = issueº?.title ?? String()
+                    let resultingIssueNumber = issueº?.number ?? -1
                     // constructing the target issue URL by hand since API returns only api-url
                     let resultingIssueURLString = "https://github.com/\(issueOwner)/\(issueRepo)/issues/\(resultingIssueNumber)"
                     
-                    _ = sourceEditSession.remove(linesAt: issueBodyRange.lowerBound ..< issueBodyRange.upperBound)
+                    
+                    var issueBodyRangesExcludingCode = [Range<Int>]()
+                    var beginingRange = issueBodyRange.lowerBound
+                    for codeRange in issueEntity.codeRanges {
+                        issueBodyRangesExcludingCode.append(beginingRange ..< codeRange.lowerBound)
+                        beginingRange = codeRange.upperBound
+                    }
+                    issueBodyRangesExcludingCode.append(beginingRange ..< issueBodyRange.upperBound)
+            
+                    for issueBodyRangeExcludingCode in issueBodyRangesExcludingCode {
+                        _ = sourceEditSession.remove(linesAt: issueBodyRangeExcludingCode.lowerBound ..< issueBodyRangeExcludingCode.upperBound)
+                    }
                     let submittedIssueBody = [
                         "//TODO: \(issueOwner)/\(issueRepo): Issue #\(resultingIssueNumber): \(resultingIssueTitle)",
                         "//link: \(resultingIssueURLString)"

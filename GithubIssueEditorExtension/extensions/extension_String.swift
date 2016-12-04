@@ -116,4 +116,29 @@ extension String {
         
         return targetCapturingGroups
     }
+    
+    
+    /// Extracts the indentation (in form of spaces or tabs) present before any other content
+    ///
+    /// - Returns: indentation string (in form of spaces or tabs)s
+    public func extractingIndentation() -> String {
+        
+        let nonSpaceCharacters = CharacterSet.whitespacesAndNewlines.inverted
+        
+        let indentationEndIndex: String.Index
+        let targetLine = self
+        
+        // retriving the possion of next character after indentation
+        if let range = targetLine.rangeOfCharacter(from: nonSpaceCharacters){
+            indentationEndIndex = range.lowerBound
+        } else {
+            // if line contains only whitespaces and newlines, set the indendationEndIndex
+            // to the position before the last (carrier return) character
+            indentationEndIndex = (targetLine.isEmpty) ? targetLine.endIndex : targetLine.index(before: targetLine.endIndex)
+        }
+        
+        // construct the indendentation string that will be prefixed in each string we will insert
+        let currentIndentation = targetLine.substring(to: indentationEndIndex).trimmingCharacters(in: CharacterSet.newlines)
+        return currentIndentation
+    }
 }
