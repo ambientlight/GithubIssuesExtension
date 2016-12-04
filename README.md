@@ -25,8 +25,9 @@ Commands:
 Owner and repository name are automatically inferred from the source file header. Project name is treated as a repository, while the name of the the copyright holder is treated as repository owner.
 
 ``assignee`` parameter is optional.  
-``Description`` can be multiline. Empty comment lines ``//`` will be treated as newlines.  
-(while issue ``title`` cannot be multiline)
+``Description`` and `Title` can be multiline. 
+Empty comment line ``//`` or parameter line will end the tile,
+while in description, empty comment line will be treated as newlines.  
 
 ## Modify Existing Github Issue
 
@@ -35,6 +36,14 @@ Owner and repository name are automatically inferred from the source file header
 If shouldOverrideDescription is not specified, the new description will be appended to existing one. 
 
 ``title``, `assignee`, `status`, `shouldOverrideDescription` are optional.
+
+## Adding code into issue description
+
+![image](https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/issueWithCodeInDescription.png)
+
+The code in between `// <code>` and `// </code>` will be present as part of the issue description. Code language (for syntax highlighting) will be derived from source file extension present in xcode generated source file header. Multiple code blocks are allowed within the same issue. The example demonstrated above will look on github in the following way:
+
+![image](https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/issueWithCodeOnGithub.png)
 
 ## App Store
 

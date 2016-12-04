@@ -231,9 +231,11 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
         for (index, lineObject) in sourceTextBuffer.lines.enumerated() {
             let lineNoIndent = (lineObject as! String).trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             
+            //parsing code blocks
             if isParsingCodeBlock && !lineNoIndent.hasPrefix("//") {
                 var line = (lineObject as! String)
                 
+                //extracting indentation (occurs at first code line)
                 var codeBlockRootIndenation: String
                 if let indentation = codeBlockRootIndentationº {
                     codeBlockRootIndenation = indentation
@@ -243,6 +245,7 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                 }
                 
                 //remove the root indentation from code line
+                //we only keep the indentation relative to the beginning of this code block
                 if let indentationRange = line.range(of: codeBlockRootIndenation){
                     line = line.substring(from: indentationRange.upperBound)
                 }
@@ -338,7 +341,9 @@ class GithubIssuesExtension: NSObject, XCSourceEditorExtension {
                             if let currentCodeBlockLowerBound = currentCodeBlockLowerBoundº {
                                 currentIssueEntity.codeRanges.append(currentCodeBlockLowerBound ..< index)
                             }
+                            
                             currentCodeBlockLowerBoundº = nil
+                            codeBlockRootIndentationº = nil
                             
                         } else {
                             currentIssueEntity.foundDescription += (lineWithoutCommentsPrefixCleaned.isEmpty) ? "\n" : lineWithoutCommentsPrefixCleaned

@@ -70,7 +70,8 @@ class SubmitIssuesCommand: NSObject, XCSourceEditorCommand {
                     // constructing the target issue URL by hand since API returns only api-url
                     let resultingIssueURLString = "https://github.com/\(issueOwner)/\(issueRepo)/issues/\(resultingIssueNumber)"
                     
-                    
+                    // constructing the line ranges that belong to issue for removal after submission succeeds
+                    // code blocks are ignored
                     var issueBodyRangesExcludingCode = [Range<Int>]()
                     var beginingRange = issueBodyRange.lowerBound
                     for codeRange in issueEntity.codeRanges {
