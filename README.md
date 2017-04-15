@@ -1,6 +1,6 @@
 ![image](https://raw.githubusercontent.com/ambientlight/GithubIssuesExtension/master/Contents/appIcon256.png)
 
-##Github Issues Xcode Extension##
+## Github Issues Xcode Extension
 
 Have you even been creating github issues while coding and adding them as `//TODO:` into your source files? Now you won't need to leave xcode while doing that!
 
